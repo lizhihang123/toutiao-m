@@ -1,14 +1,21 @@
 <!--
  * @Date: 2022-01-08 11:26:53
- * @LastEditTime: 2022-01-08 15:31:37
+ * @LastEditTime: 2022-01-09 14:45:05
 -->
 <template>
   <div id="app">
-    <router-view />
-    <h1>
-      <i class="iconfont icon-share"></i>
-    </h1>
+    <!-- 切记 路由出口文件不能删去 -->
+    <router-view></router-view>
   </div>
 </template>
 
-<style lang="less"></style>
+<script>
+export default {
+  data() {
+    return {};
+  },
+  methods: {}
+};
+</script>
+
+<style lang="less" scoped></style>

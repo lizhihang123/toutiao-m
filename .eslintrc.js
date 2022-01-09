@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-01-07 09:45:39
- * @LastEditTime: 2022-01-08 15:58:07
+ * @LastEditTime: 2022-01-09 09:09:19
  */
 module.exports = {
   // 当前目录就是根目录
@@ -8,13 +8,13 @@ module.exports = {
   // 启用 ESLint 检测环境
   env: {
     // node环境下启动ESLint 检测环境
-    node: true
+    node: true,
   },
   // 在ESLint 中基础配置需要继承的配置
   extends: ["plugin:vue/essential", "@vue/standard"],
   // 解析器
   parserOptions: {
-    parser: "babel-eslint"
+    parser: "babel-eslint",
   },
   // 需要修改的启动规则 及各自的错误级别
   /**
@@ -32,8 +32,8 @@ module.exports = {
     // 结尾有无分号 总是无
     semi: 0,
     // 数组和对象末尾最后一个值 有无逗号 总是有
-    "comma-dangle": 2,
+    "comma-dangle": 0,
     // 函数括号前必须有空格
-    "space-before-function-paren": 0
-  }
+    "space-before-function-paren": 0,
+  },
 };
