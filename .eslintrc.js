@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-01-07 09:45:39
- * @LastEditTime: 2022-01-09 09:09:19
+ * @LastEditTime: 2022-01-23 16:50:14
  */
 module.exports = {
   // 当前目录就是根目录
@@ -35,5 +35,11 @@ module.exports = {
     "comma-dangle": 0,
     // 函数括号前必须有空格
     "space-before-function-paren": 0,
+    "vue/no-dupe-keys": [
+      "off",
+      {
+        groups: [],
+      },
+    ],
   },
 };

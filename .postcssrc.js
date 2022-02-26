@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-01-09 09:36:28
- * @LastEditTime: 2022-01-09 11:16:25
+ * @LastEditTime: 2022-01-20 14:18:24
  */
 module.exports = {
   // 1. 自动给样式 加前缀 不在这里配置 去package.json配置
@@ -19,6 +19,7 @@ module.exports = {
       },
       //   表示给所有的标签涉及 单位的 都进行转换 也可以指定 ['height','width']
       propList: ["*"],
+      exclude: "github-markdown", // 排除这个文件 -> 这个文件不设置 px转化为rem
     },
   },
 };

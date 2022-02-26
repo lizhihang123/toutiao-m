@@ -1,0 +1,27 @@
+<!--
+ * @Date: 2022-01-18 16:02:45
+ * @LastEditTime: 2022-01-20 16:05:59
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <img src="./src/assets/banner.png" alt="" />
+    <img src="./src/assets/banner.png" alt="" />
+    <script>
+      const imgs = document.querySelectorAll("img")
+      console.log(imgs)
+      imgs.forEach((item, index) => {
+        console.log(item)
+        item.onclick = () => {
+          console.log(1)
+        }
+      })
+    </script>
+  </body>
+</html>

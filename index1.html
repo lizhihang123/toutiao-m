@@ -1,0 +1,33 @@
+<!--
+ * @Date: 2022-01-21 14:39:37
+ * @LastEditTime: 2022-01-21 16:15:58
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">点击打印1</button>
+    <script>
+      var btn = document.querySelector("#btn")
+      function addOne() {
+        console.log("one")
+      }
+      function debounce(fun, time) {
+        let timer
+        return function () {
+          clearTimeout(timer)
+          let args = arguments
+          timer = setTimeout(function () {
+            fun(args)
+          }, 1000)
+        }
+      }
+      btn.addEventListener("click", debounce(addOne, 200))
+    </script>
+  </body>
+</html>
