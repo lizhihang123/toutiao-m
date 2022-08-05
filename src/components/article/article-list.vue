@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-14 13:34:28
- * @LastEditTime: 2022-01-22 18:46:30
+ * @LastEditTime: 2022-08-05 16:13:15
 -->
 <template>
   <div class="article-list">
@@ -9,6 +9,7 @@
       @refresh="onRefresh"
       success-duration="1500"
       :success-text="loadSuccessText"
+      id="demo"
     >
       <!-- 列表内容 -->
       <van-list
@@ -42,18 +43,18 @@ export default {
       timestamp: null,
       error: false, // error为false 没有错误提示 true 有
       refreshing: false, // 下来刷新功能
-      loadSuccessText: "加载完成"
+      loadSuccessText: "加载完成",
     };
   },
   name: "ArticleList",
   components: {
-    ArticleItem
+    ArticleItem,
   },
   props: {
     channel: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     async onLoad() {
@@ -61,7 +62,7 @@ export default {
         // 1. 请求数据
         const { data } = await GetNewsContentAPI({
           channel_id: this.channel.id, // 频道ID
-          timestamp: this.timestamp || Date.now() // 请求新数据的时间戳
+          timestamp: this.timestamp || Date.now(), // 请求新数据的时间戳
         });
         // 故意写bug  测试用
         // if (Math.random() > 0.2) {
@@ -92,7 +93,7 @@ export default {
         // 1. 请求数据
         const { data } = await GetNewsContentAPI({
           channel_id: this.channel.id, // 频道ID
-          timestamp: Date.now() // 请求新数据的时间戳 就是当前时间
+          timestamp: Date.now(), // 请求新数据的时间戳 就是当前时间
         });
         // if (Math.random() > 0.2) {
         //   JSON.parse("aabcdefg");
@@ -108,8 +109,8 @@ export default {
         this.refreshing = false; // 关闭刷新加载效果
         this.loadSuccessText = "本次加载失败";
       }
-    }
-  }
+    },
+  },
   // onLoad() {
   //   // 1. 请求数据
   //   //
@@ -133,7 +134,7 @@ export default {
 
 <style scoped lang="less">
 .van-pull-refresh {
-    overflow-y: scroll !important;
+  overflow-y: scroll !important;
   // padding-top: 100px;
   // 为什么稍微下拉就能够刷新？
   // 为什么overflow: scroll能够解决这个问题 这两个有什么关系？
@@ -153,7 +154,6 @@ export default {
     // height: 100%;
     height: 79vh;
     // overflow-y: auto;
-
   }
 }
 </style>

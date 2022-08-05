@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-12 09:52:23
- * @LastEditTime: 2022-01-22 18:47:46
+ * @LastEditTime: 2022-08-05 16:12:54
 -->
 <template>
   <div class="home-container">
@@ -26,9 +26,9 @@
         :key="channel.id"
         id="articleList"
       >
-          <article-list :channel="channel" > </article-list>
+        <article-list :channel="channel"> </article-list>
       </van-tab>
-      <div slot="nav-right" class="placeholder" id="test" ></div>
+      <div slot="nav-right" class="placeholder" id="test"></div>
       <div slot="nav-right" class="nav-right" id="test2" @click="PopFn">
         <i class="toutiao toutiao-gengduo"></i>
       </div>
@@ -68,12 +68,12 @@ export default {
       active: 0,
       channels: [], // 标签的频道数据
       isPopupShow: false, // 控制 弹出层是否显示
-      scrollTop: 0 // 记录列表页的滚动的位置
+      scrollTop: 0, // 记录列表页的滚动的位置
     };
   },
   components: {
     ArticleList,
-    ChannelEdit
+    ChannelEdit,
   },
   created() {
     this.loadUserChannel();
@@ -84,14 +84,13 @@ export default {
   activated() {
     // console.log(document.querySelector("#articleList"));  // 能够打印出dom元素
   },
-  deactivated() {
-  },
+  deactivated() {},
   computed: {
-    ...mapState(["user"])
+    ...mapState(["user"]),
   },
   methods: {
     async loadUserChannel() {
-      console.log(document.querySelector('#articleList'));
+      console.log(document.querySelector("#articleList"));
       // const { data } = await loadUserChannelAPI();
       // this.channels = data.data.channels;
       let channel = [];
@@ -121,8 +120,8 @@ export default {
       console.log(index);
       this.active = index;
       this.isPopupShow = isPopupShow;
-    }
-  }
+    },
+  },
 };
 </script>
 
