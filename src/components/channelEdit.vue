@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-15 20:06:21
- * @LastEditTime: 2022-01-18 09:15:32
+ * @LastEditTime: 2022-08-05 15:21:04
 -->
 <template>
   <div class="channel-edit">
@@ -66,7 +66,7 @@
 import {
   getAllChannelsAPI,
   storeUserChannelsAPI,
-  deleteUserChannelsAPI
+  deleteUserChannelsAPI,
 } from "@/api";
 import { mapState } from "vuex";
 import { setItem } from "@/utils/storage.js";
@@ -76,18 +76,38 @@ export default {
     return {
       allChannel: [], // 接受所有频道信息
       isEdit: false, // 控制 编辑按钮的显示状态
-      fixedChannel: [0, 1] // 不能删除的频道
+      fixedChannel: [0, 1], // 不能删除的频道
     };
   },
   props: {
     myChannels: {
       type: Array,
-      required: true
+      required: true,
     },
     Sactive: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
+  },
+  computed: {
+    // user监控 用户是否登录
+    ...mapState(["user"]),
+    recommendChannels() {
+      /*
+      从allChannel“所有频道”遍历时，去“我的频道”找，是否有id和所有频道里面一致的，如果找不到，就把这个数据放到recommendC，返回给recommendChannels频道推荐下面。
+      因此，我们删除频道时，不需要额外的比如从“推荐频道”里面push一个数据，再从“我的频道里面”pop一个数据出来
+      */
+      const recommendC = [];
+      this.allChannel.forEach((item) => {
+        const results = this.myChannels.find((userItem) => {
+          return userItem.id === item.id;
+        });
+        if (!results) {
+          recommendC.push(item);
+        }
+      });
+      return recommendC;
+    },
   },
   created() {
     this.loadAllChannels();
@@ -114,7 +134,7 @@ export default {
         if (this.user) {
           await storeUserChannelsAPI({
             id: recommendChannel.id,
-            seq: this.myChannels.length
+            seq: this.myChannels.length,
           });
         } else {
           // 如果用户没有登录,数据存储在本地存储
@@ -126,22 +146,28 @@ export default {
     },
     // 点击切换 频道数据
     toggleChannel(mychannel, index) {
-      // 1. 不能删除的数组 必须用id 因为索引会变化 id针对具体值 删除只有前后关系用index没事
-      if (this.fixedChannel.includes(mychannel.id)) {
-        return;
-      }
       // 2. 如果 点击的item  索引小于 高亮的item 就让Sactive--
       //
       if (this.isEdit === false) {
-        console.log(mychannel, mychannel.id);
-        console.log(index);
+        console.log("mychannel, mychannel.id", mychannel, mychannel.id);
+        console.log("index", index);
+        /*
+        这里用index而不是用id的原因是。
+        假设有tab1 tab2 tab3 tab4 索引和id此时都是0 1 2 3
+        删除tab3
+        此时tab4的索引是2，但是id还是3
+        如果点击tab4 请问 跳转的时候依据如果是id，就会跳转到“3“
+        */
         this.$emit("upload_active", index, false);
       } else {
+        // 1. 不能删除的数组 必须用id 因为索引会变化 id针对具体值 删除只有前后关系用index没事
+        if (this.fixedChannel.includes(mychannel.id)) {
+          return;
+        }
         // Sactive 是 切换频道 以至于 高亮的值 索引小于高亮 就传递 索引值
         if (index < this.Sactive) {
           this.$emit("upload_active", this.Sactive - 1, true);
         }
-        // 删除数据 用索引 index 删掉索引对应项 索引不用 -1
         // [a,b,c,d] c是高亮，点击b删掉b 希望高亮还是c
         // 删掉索引就是点击获取的索引，下面依旧是index
         // this.$emit 传递的索引 因为删除了一个元素，所以高亮的索引就要 - 1
@@ -164,31 +190,8 @@ export default {
       } catch (err) {
         this.$toast("存储删除 - 频道 失败，稍后再试");
       }
-    }
+    },
   },
-  computed: {
-    // user监控 用户是否登录
-    ...mapState(["user"]),
-    recommendChannels() {
-      // return this.allChannel.filter((recommendChannel) => {
-      //   // filter 内部会声明一个数组 用来存储值；filter也会遍历数组
-      //   // 下 第一个return 返回布尔值 如果是true 下 如果id不相等 遍历的项会push进入数组 不加！--> 如果id相等 数据push进入数组
-      //   return !this.myChannels.find((myChannel) => {
-      //     return recommendChannel.id === myChannel.id;
-      //   });
-      // });
-      const recommendC = [];
-      this.allChannel.forEach((item) => {
-        const results = this.myChannels.find((userItem) => {
-          return userItem.id === item.id;
-        });
-        if (!results) {
-          recommendC.push(item);
-        }
-      });
-      return recommendC;
-    }
-  }
 };
 </script>
 
