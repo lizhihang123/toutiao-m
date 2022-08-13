@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-19 19:25:17
- * @LastEditTime: 2022-01-26 20:43:11
+ * @LastEditTime: 2022-08-08 10:29:24
 -->
 <template>
   <div class="article-container">
@@ -201,19 +201,19 @@ export default {
       isPopShow: false, // 弹出层 是否显示
       commentList: [], // 评论列表
       isReplyShow: false, // 评论回复
-      currentComment: null // 当前评论对象
+      currentComment: null, // 当前评论对象
     };
   },
   provide: function () {
     return {
-      articleId: this.articleId // 通过provide传递文章id
+      articleId: this.articleId, // 通过provide传递文章id
     };
   },
   props: {
     articleId: {
       type: [Number, String], // url点击进去获取 与 文章item点击进去获取的 id可能是字符串 可能是数组 所以要定义双类型
-      required: true
-    }
+      required: true,
+    },
   },
   components: {
     UserButton,
@@ -221,7 +221,7 @@ export default {
     ArticleLike,
     CommentList,
     CommentPost,
-    CommentReply
+    CommentReply,
   },
 
   created() {
@@ -272,7 +272,7 @@ export default {
             // 是否有关闭按钮
             closeable: true,
             // 点击图片 起始值是什么
-            startPosition: index
+            startPosition: index,
           });
         };
       });
@@ -289,8 +289,8 @@ export default {
     popShowFnT(comment) {
       this.currentComment = comment;
       this.isReplyShow = true;
-    }
-  }
+    },
+  },
 };
 </script>
 

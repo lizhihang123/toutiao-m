@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-08 11:26:53
- * @LastEditTime: 2022-08-05 16:03:18
+ * @LastEditTime: 2022-08-07 14:27:27
 -->
 <template>
   <div id="app">
@@ -10,7 +10,7 @@
          2. keep-alive有哪些缺点 也要准备好
      -->
     <keep-alive>
-      <router-view v-if="$route.meta.keepalive" ref="demo"></router-view>
+      <router-view v-if="$route.meta.keepalive"></router-view>
     </keep-alive>
     <router-view v-if="!$route.meta.keepalive"></router-view>
   </div>
@@ -22,6 +22,26 @@ export default {
     return {};
   },
   methods: {},
+  deactivated() {
+    console.log(document.getElementById("demo"));
+    // 离开页面之前将高度存储到sessionStorage。这里不建议用localStorage，因为session在关闭浏览器时会自动清除，而local则需要手动清除，有点麻烦。
+    sessionStorage.setItem(
+      "scrollH",
+      document.getElementById("demo") &&
+        document.getElementById("demo").scrollTop
+    );
+  },
+
+  activated() {
+    // 在activated生命周期内，从sessionStorage中读取高度值并设置到dom
+    if (
+      sessionStorage.getItem("scrollH") &&
+      document.getElementById("demo").scrollTop
+    ) {
+      document.getElementById("demo").scrollTop =
+        sessionStorage.getItem("scrollH");
+    }
+  },
 };
 </script>
 

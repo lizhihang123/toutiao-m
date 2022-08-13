@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-01-08 11:26:53
- * @LastEditTime: 2022-01-26 20:51:34
+ * @LastEditTime: 2022-08-07 14:13:52
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -23,7 +23,7 @@ const routes = [
     // name: "layout",
     component: () => import("@/views/layout/index.vue"),
     meta: {
-      keepalive: true
+      keepalive: true, // 需要做缓存
     },
     children: [
       {
@@ -32,7 +32,7 @@ const routes = [
         component: () => import("@/views/home/index.vue"),
         meta: {
           keepalive: true, // 需要做缓存
-        }
+        },
       },
       {
         path: "qa",
@@ -40,7 +40,7 @@ const routes = [
         component: () => import("@/views/qa/index.vue"),
         meta: {
           keepalive: true, // 需要做缓存
-        }
+        },
       },
       {
         path: "video",
@@ -48,8 +48,7 @@ const routes = [
         component: () => import("@/views/video/index.vue"),
         meta: {
           keepalive: true, // 需要做缓存
-        }
-
+        },
       },
       {
         path: "my",
@@ -57,8 +56,7 @@ const routes = [
         component: () => import("@/views/my/index.vue"),
         meta: {
           keepalive: true, // 需要做缓存
-        }
-
+        },
       },
     ],
   },
