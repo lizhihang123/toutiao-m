@@ -1,33 +1,39 @@
 <!--
  * @Date: 2022-01-21 14:39:37
- * @LastEditTime: 2022-01-21 16:15:58
+ * @LastEditTime: 2022-08-18 19:34:41
 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body>
-    <button id="btn">点击打印1</button>
-    <script>
-      var btn = document.querySelector("#btn")
-      function addOne() {
-        console.log("one")
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+</head>
+
+<body>
+  <button id="pay">点击付钱</button>
+  <script>
+    let button = document.querySelector('#pay')
+    function payMoney() {
+      console.log(this); // window
+      console.log('已经剁手付钱了');
+    }
+    function debounce(func, delay) {
+      let timer
+      // console.log(this); // 这里指向的是window 为什么给button绑定的事件 this指向的是window呢
+      return function () {
+        clearTimeout(timer)
+        let context = this
+        let args = arguments
+        timer = setTimeout(function () {
+          func.apply(context, args)
+        }, delay)
       }
-      function debounce(fun, time) {
-        let timer
-        return function () {
-          clearTimeout(timer)
-          let args = arguments
-          timer = setTimeout(function () {
-            fun(args)
-          }, 1000)
-        }
-      }
-      btn.addEventListener("click", debounce(addOne, 200))
-    </script>
-  </body>
+    }
+    button.addEventListener('click', debounce(payMoney, 1000))
+  </script>
+</body>
+
 </html>

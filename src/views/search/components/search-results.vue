@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-17 18:03:06
- * @LastEditTime: 2022-01-19 13:14:32
+ * @LastEditTime: 2022-09-11 14:50:29
 -->
 <template>
   <div class="search-results">
@@ -17,6 +17,7 @@
         v-for="(article, index) in list"
         :key="index"
         :title="article.title"
+        @click="jump(article)"
       />
     </van-list>
   </div>
@@ -34,14 +35,14 @@ export default {
       loading: false, // 滚动到底部 内部自动 loading -> true 若数据加载完毕，手动 loading -> false
       page: 1, // 当前的页码
       perpage: 10, // 每页的数据数量
-      error: false // 是否出现错误提示 初始为false
+      error: false, // 是否出现错误提示 初始为false
     };
   },
   props: {
     SearchText: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     async onLoad() {
@@ -50,7 +51,7 @@ export default {
         const { data } = await getSearchResultAPI({
           page: this.page, // 当前的页码
           perpage: this.perpage, // 每页的数据是多少
-          q: this.SearchText // 搜索传入后台的关键词
+          q: this.SearchText, // 搜索传入后台的关键词
         });
         // 2. 数据赋值给数组 数据渲染
         const results = data.data.results;
@@ -70,8 +71,14 @@ export default {
         this.error = true; // 开启错误提示
         this.loading = false; // 加载状态停止 点击错误提示 重新触发load事件
       }
-    }
-  }
+    },
+    jump(article) {
+      console.log(article);
+      this.$router.push({
+        path: `/article/${article.art_id}`,
+      });
+    },
+  },
 };
 </script>
 

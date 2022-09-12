@@ -1,10 +1,11 @@
 /*
  * @Date: 2022-01-09 11:25:11
- * @LastEditTime: 2022-08-08 14:12:31
+ * @LastEditTime: 2022-08-13 19:37:37
  */
 import axios from "axios";
 import store from "@/store/index.js";
 import JSONBig from "json-bigint";
+import router from '@/router'
 // axios.defaults.baseURL = "http://toutiao.itheima.net";
 
 const request = axios.create({
@@ -52,4 +53,54 @@ request.interceptors.request.use(
   }
 );
 // 响应拦截器
+
+request.interceptors.response.use(
+  function(response) {
+    // 1. 请求成功 进入的回调函数
+    // 2xx状态码范围内的状态码都会触发该函数
+    return response
+  },
+  // 2. 请求失败 进入的回调函数
+  async function(error) {
+    //    打印失败的信息
+    //    超出2XX范围的状态码都会触发该函数
+    console.dir(error);
+
+    // 如果有返回respone信息 并且响应信息的state的值是401 就return 不要执行 跳转到登录页面
+    // 401 状态码一般用于表示用户的信息认证
+    if (error.response && error.response.status === 401) {
+      const user = store.state.user
+
+      if (!user || !user.refresh_token) {
+        router.push('/login')
+        return
+      }
+      try {
+        // 如果有refresh_token 就请求获取新的token值
+        // 再次封装一个函数 调另一个接口 旧token -> 换新的token 如果token刷新时间也过期了 就跳转到router页面
+        const res = await axios({
+          method: 'PUT',
+          url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
+          headers: {
+            Authorization: `Bearer ${user.refresh_token}`
+          }
+        })
+        console.log(res, 'res是失败的信息');
+
+        // 把信息存储到vuex
+        store.commit('setUser', {
+          token: res.data.data.token, // 最新的token值
+          refresh_token: user.refresh_token // 还是原来的refresh_token值
+        })
+        // request能够把之前失败的请求再次发送出去，
+        // error.config包含之前发送失败的 method url的信息
+        return request(error.config)
+      } catch (error) {
+        router.push('/login')
+      }
+    }
+    return Promise.reject(error)
+  }
+);
+
 export default request;

@@ -1,6 +1,6 @@
 /*
  * @Date: 2022-01-08 11:26:53
- * @LastEditTime: 2022-08-07 14:13:52
+ * @LastEditTime: 2022-09-12 08:25:40
  */
 import Vue from "vue";
 import VueRouter from "vue-router";
@@ -13,25 +13,27 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
+  // 默认路由
+  {
+    path: '/',
+    redirect: '/home'
+  },
   {
     path: "/login",
     name: "login",
-    component: () => import("@/views/login/index.vue"),
+    component: () => import(/* webpackPrefetch:true */"@/views/login/index.vue"),
   },
   {
-    path: "/", // 默认路由
+    path: "", // 默认路由
     // name: "layout",
     component: () => import("@/views/layout/index.vue"),
-    meta: {
-      keepalive: true, // 需要做缓存
-    },
     children: [
       {
-        path: "", // 默认子路由
+        path: "home", // 默认子路由
         name: "home",
         component: () => import("@/views/home/index.vue"),
         meta: {
-          keepalive: true, // 需要做缓存
+          scrollT: 0
         },
       },
       {

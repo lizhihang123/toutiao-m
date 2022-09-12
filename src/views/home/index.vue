@@ -1,38 +1,48 @@
 <!--
  * @Date: 2022-01-12 09:52:23
- * @LastEditTime: 2022-08-05 16:12:54
+ * @LastEditTime: 2022-09-12 12:38:36
 -->
 <template>
   <div class="home-container">
     <!-- 头部 NavBar -->
-    <van-nav-bar class="nav-tab-btn" title="登录" fixed>
-      <van-button
-        slot="title"
-        type="info"
-        icon="search"
-        round
-        size="mini"
-        class="search-nav"
-        to="/search"
-        >搜索</van-button
-      >
-    </van-nav-bar>
+    <div>
+      <van-nav-bar class="nav-tab-btn" title="登录" fixed>
+        <van-button
+          slot="title"
+          type="info"
+          icon="search"
+          round
+          size="mini"
+          class="search-nav"
+          to="/search"
+          >搜索</van-button
+        >
+      </van-nav-bar>
+    </div>
 
     <!-- tabs标签滚动 -->
-    <van-tabs class="tab-list" v-model="active" animated swipeable>
-      <van-tab
-        :title="channel.name"
-        v-for="channel in channels"
-        :key="channel.id"
-        id="articleList"
+    <div class="main">
+      <van-tabs
+        class="tab-list"
+        v-model="active"
+        animated
+        swipeable
+        ref="tabList"
       >
-        <article-list :channel="channel"> </article-list>
-      </van-tab>
-      <div slot="nav-right" class="placeholder" id="test"></div>
-      <div slot="nav-right" class="nav-right" id="test2" @click="PopFn">
-        <i class="toutiao toutiao-gengduo"></i>
-      </div>
-    </van-tabs>
+        <van-tab
+          :title="channel.name"
+          v-for="channel in channels"
+          :key="channel.id"
+          ref="articleList"
+        >
+          <article-list id="demo" :channel="channel"> </article-list>
+        </van-tab>
+        <div slot="nav-right" class="placeholder" id="test"></div>
+        <div slot="nav-right" class="nav-right" id="test2" @click="PopFn">
+          <i class="toutiao toutiao-gengduo"></i>
+        </div>
+      </van-tabs>
+    </div>
 
     <!-- 弹出层 -->
     <van-popup
@@ -61,6 +71,10 @@ import ChannelEdit from "@/components/channelEdit.vue";
 import { mapState } from "vuex";
 // 导入getItem
 import { getItem } from "@/utils/storage.js";
+// window.addEventListener("scroll", function () {
+//   console.log(document.documentElement.scrollTop);
+// });
+
 export default {
   name: "HomeIndex",
   data() {
@@ -80,17 +94,17 @@ export default {
   },
   mounted() {
     // 为什么外来的组件 这里打印出来是null 因为这个组件是引入来的
+    // const demo = document.getElementById("demo");
+    // demo.addEventListener("scroll", function () {
+    //   console.log(1);
+    // });
   },
-  activated() {
-    // console.log(document.querySelector("#articleList"));  // 能够打印出dom元素
-  },
-  deactivated() {},
+
   computed: {
     ...mapState(["user"]),
   },
   methods: {
     async loadUserChannel() {
-      console.log(document.querySelector("#articleList"));
       // const { data } = await loadUserChannelAPI();
       // this.channels = data.data.channels;
       let channel = [];
@@ -121,6 +135,38 @@ export default {
       this.active = index;
       this.isPopupShow = isPopupShow;
     },
+    /**
+     * 记录，当前页面的滚动距离，存储给当前组件的route.meta元信息
+     */
+    scrollFn() {
+      console.log(1);
+      this.$route.meta.scrollT =
+        document.documentElement.scrollTop || document.body.scrollTop;
+    },
+  },
+  /*
+  1.第一次进入页面activated是否会被触发 触发了
+  2.监听滚动事件试试
+  3.目标是 从首页 -> 我的 页面 这个activated应该写在哪个页面上?
+    思考：从首页 -> 我的 页面 哪个组件会被创建 哪个组件会被销毁 就好了 -》home/index.vue
+  4.组件一进来 就监听滚动事件 但是不是监听 window的滚动事件 而是其他组件
+    (坑)第一次进入页面 -》进入activated -》获取不到dom元素 只有经历了一次组件销毁 -》再次进入创建 就能够获取到dom
+    (问)为什么是这样？
+    (问)this.$nextTick不会生效
+    测试 如果是组件套组件 不会生效
+  */
+  activated() {
+    // 切回来
+    // console.log(this.$route);
+    // window和document, 监听网页滚动的事件
+    // html标签获取scrollTop, 滚动的距离, 和设置滚动的位置
+    // 立刻设置, 滚动条位置
+    window.addEventListener("scroll", this.scrollFn);
+    document.documentElement.scrollTop = this.$route.meta.scrollT;
+  },
+  deactivated() {
+    // 先切换 记录高度的
+    window.removeEventListener("scroll", this.scrollFn);
   },
 };
 </script>

@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-09 13:49:10
- * @LastEditTime: 2022-01-17 15:02:14
+ * @LastEditTime: 2022-09-11 15:32:26
 -->
 <template>
   <div class="login-container">
@@ -49,6 +49,7 @@
           >
         </template>
       </van-field>
+      <div class="tips">点击发送验证码 再点击登录</div>
       <div class="btn-login-outer">
         <van-button class="btn-login" block type="info" native-type="submit"
           >登录</van-button
@@ -73,34 +74,34 @@ export default {
   data() {
     return {
       user: {
-        mobile: "",
-        code: ""
+        mobile: "13911111111",
+        code: "246810",
       },
       // 2. 表单验证 (13911111111 246810) 万能账号
       formatRules: {
         mobile: [
           {
             required: true,
-            message: "手机号不能为空"
+            message: "手机号不能为空",
           },
           {
             pattern: /^1[3|5|8|7]\d{9}$/,
-            message: "手机号的格式错误"
-          }
+            message: "手机号的格式错误",
+          },
         ],
         code: [
           {
             required: true,
-            message: "验证码不能为空"
+            message: "验证码不能为空",
           },
           {
             pattern: /^\d{6}$/,
-            message: "验证码的格式不对"
-          }
-        ]
+            message: "验证码的格式不对",
+          },
+        ],
       },
       // 3. 倒计时显示
-      isCountDown: false
+      isCountDown: false,
     };
   },
 
@@ -113,14 +114,13 @@ export default {
       this.$toast.loading({
         message: "加载中",
         forbidClick: true,
-        duration: 5000
+        duration: 5000,
       });
       try {
         const { data } = await loginAPI(this.user);
         console.log("请求成功", data.data); // token refresh_token
         this.$store.commit("setUser", data.data);
         this.$toast.success("请求成功");
-
         // 登录成功跳转
         this.$router.back();
       } catch (err) {
@@ -139,24 +139,24 @@ export default {
       this.$toast.loading({
         message: "加载中",
         forbidClick: true,
-        duration: 5000
+        duration: 5000,
       });
+      // 输入手机号 才能“开始发送验证码”
       try {
-        await this.$refs.loginForm.validate("mobile");
+        await this.$refs.loginForm.te("mobile");
         console.log("验证通过");
       } catch (err) {
         return console.log("验证失败", err);
       }
-
       // 验证通过的代码写下面
       // 手机号验证通过 倒计时显示
       this.isCountDown = true;
-
       // 真的发送验证码
       try {
+        // 调用接口
         const res = await sendSmsAPI(this.user.mobile);
         console.log(res);
-        // this.$toast.success("发送成功");
+        this.$toast.success("发送成功");
         // this.$store.setUser();
       } catch (err) {
         if (err.response.status === 429) {
@@ -166,8 +166,8 @@ export default {
         }
         this.isCountDonwn = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -199,5 +199,9 @@ body {
     border: none;
     background-color: #6db4fb;
   }
+}
+.tips {
+  font-size: 12px;
+  color: #666;
 }
 </style>

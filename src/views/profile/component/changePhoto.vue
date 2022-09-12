@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-25 14:39:22
- * @LastEditTime: 2022-01-25 19:00:15
+ * @LastEditTime: 2022-08-23 17:21:10
 -->
 <template>
   <div class="Photo-container">
@@ -22,7 +22,7 @@ export default {
   name: "changePhoto",
   data() {
     return {
-      cropper: null
+      cropper: null,
     };
   },
   mounted() {
@@ -38,15 +38,15 @@ export default {
       cropBoxResizable: false, // 裁剪区域 是否可以放大缩小
       background: false, // 要不要背景的网格
       movable: true,
-      crop(event) {}
+      crop(event) {},
     });
     console.log(this.cropper);
   },
   props: {
     img: {
       type: [String, Object],
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     onConfirm() {
@@ -77,7 +77,7 @@ export default {
       this.$toast.loading({
         message: "加载中",
         duration: 0, // 表示没有加载好 不会停止
-        forbidClick: true // 是否禁止背景点击
+        forbidClick: true, // 是否禁止背景点击
       });
       const formData = new FormData();
       formData.append("photo", blob);
@@ -90,13 +90,13 @@ export default {
         // 更新视图
         this.$emit("upload-photo", data.data.photo);
         // 更新成功
-        this.$toast.success('更新成功')
+        this.$toast.success("更新成功");
       } catch (error) {
         // 更新失败
-        this.$toast.fail("更新失败")
+        this.$toast.fail("更新失败");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

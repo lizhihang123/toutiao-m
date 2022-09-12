@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-14 13:34:28
- * @LastEditTime: 2022-08-05 16:13:15
+ * @LastEditTime: 2022-09-12 12:37:41
 -->
 <template>
   <div class="article-list">
@@ -9,7 +9,7 @@
       @refresh="onRefresh"
       success-duration="1500"
       :success-text="loadSuccessText"
-      id="demo"
+      id="refresh"
     >
       <!-- 列表内容 -->
       <van-list

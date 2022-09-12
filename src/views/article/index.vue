@@ -1,6 +1,6 @@
 <!--
  * @Date: 2022-01-19 19:25:17
- * @LastEditTime: 2022-08-08 10:29:24
+ * @LastEditTime: 2022-09-11 14:47:21
 -->
 <template>
   <div class="article-container">
@@ -212,7 +212,7 @@ export default {
   props: {
     articleId: {
       type: [Number, String], // url点击进去获取 与 文章item点击进去获取的 id可能是字符串 可能是数组 所以要定义双类型
-      required: true,
+      required: false,
     },
   },
   components: {
@@ -235,7 +235,9 @@ export default {
         // if (Math.random() > 0.3) {
         //   JSON.parse("123sdfafafa");
         // }
-        const { data } = await getArticleByIdAPI(this.articleId);
+        const { data } = await getArticleByIdAPI(
+          this.articleId || this.$route.query.articleId
+        );
         this.article = data.data;
         // console.log(this.article);
         setTimeout(() => {

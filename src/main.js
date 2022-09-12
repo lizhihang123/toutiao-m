@@ -1,7 +1,8 @@
 /*
  * @Date: 2022-01-08 11:26:53
- * @LastEditTime: 2022-01-15 19:38:36
+ * @LastEditTime: 2022-08-29 16:40:41
  */
+import './utils/console'
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";

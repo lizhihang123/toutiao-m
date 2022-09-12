@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "start": "live-server ./dist"
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
@@ -14,6 +15,7 @@
     "cropperjs": "^1.5.12",
     "dayjs": "^1.10.7",
     "json-bigint": "^1.0.0",
+    "live-server": "^1.2.2",
     "lodash": "^4.17.21",
     "vant": "^2.12.37",
     "vue": "^2.6.11",
